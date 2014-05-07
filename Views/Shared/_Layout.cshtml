@@ -17,5 +17,7 @@
         <div id="flash">@Html.Raw(TempData["flash"] as string)</div>
     }
     @RenderBody()
+	<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+	@Scripts.Render("~/scripts/app")
 </body>
 </html>

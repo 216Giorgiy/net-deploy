@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace deploy {
@@ -15,25 +16,13 @@ namespace deploy {
 			filters.Add(new HandleErrorAttribute());
 		}
 
-		public static void RegisterRoutes(RouteCollection routes) {
-			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-			routes.IgnoreRoute("favicon.ico");
-
-            routes.MapRoute("apps", "apps/{action}/{id}", new { controller = "apps", id = UrlParameter.Optional });
-
-			routes.MapRoute(
-				"Default", // Route name
-				"{action}/{id}", // URL with parameters
-				new { controller = "root", action = "index", id = UrlParameter.Optional } // Parameter defaults
-			);
-
-		}
-
 		protected void Application_Start() {
 			AreaRegistration.RegisterAllAreas();
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
-			RegisterRoutes(RouteTable.Routes);
+			
+			RouteConfig.RegisterRoutes(RouteTable.Routes);
+			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             LogService.Info("Application start");
 		}

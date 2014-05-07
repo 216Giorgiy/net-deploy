@@ -1,19 +1,28 @@
 ﻿@{
     ViewBag.Title = ViewBag.id;
+	var state = ViewBag.stats as Tuple<DateTime?, string>;
 }
 
 <h1>@ViewBag.id</h1>
 
-State: <span class="state @ViewBag.state.Item2">@ViewBag.state.Item2</span>
-@switch((string)ViewBag.state.Item2) {
+@helper time(DateTime? when) {
+	if(when == null) {
+		<span class="time">never</span>
+	}
+	var ms = (int)(when.Value.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalMilliseconds;
+	<span class="time" data-date="@ms"></span>
+}
+
+State: <span class="state @state.Item2">@state.Item2</span>
+@switch((string)state.Item2) {
     case "building":
-        <span>started @(((DateTime?)ViewBag.state.Item1).Value.Diff()) ago</span>
+        <span>started @time(state.Item1)</span>
         break;
     case "idle":
-        <span>last built @(ViewBag.state.Item1 == null ? "never" : ((DateTime?)ViewBag.state.Item1).Value.Diff().ToString() + " ago")</span>
+        <span>last built @time(state.Item1)</span>
         break;
     case "failed":
-        <span>@(((DateTime?)ViewBag.state.Item1).Value.Diff()) ago</span>
+        <span>@time(state.Item1)</span>
         break;
 }
 
