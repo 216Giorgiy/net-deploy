@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = ViewBag.id;
-	var state = ViewBag.stats as Tuple<DateTime?, string>;
+	var state = ViewBag.state as Tuple<DateTime?, string>;
 }
 
 <h1>@ViewBag.id</h1>
@@ -8,6 +8,7 @@
 @helper time(DateTime? when) {
 	if(when == null) {
 		<span class="time">never</span>
+		return;
 	}
 	var ms = (int)(when.Value.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalMilliseconds;
 	<span class="time" data-date="@ms"></span>
