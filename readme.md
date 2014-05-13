@@ -78,3 +78,11 @@ There are 3 ways to get it working.
 	3. Copy your `%userprofile%\.ssh\known_hosts` file (could be from another computer) to `%programfiles(x86)%\Git\.ssh\known_hosts`
 
 If it's still not working, you might need to do some debugging by running as the local system account. [This blog post](http://blogs.msdn.com/b/adioltean/archive/2004/11/27/271063.aspx) lists some hacks to get it done. See also [this question on stackoverflow](http://stackoverflow.com/questions/77528/how-do-you-run-cmd-exe-under-the-local-system-account).
+
+### Command-line interface
+
+To install the CLI (a work in progress), first install [Scoop](http://scoop.sh) and then run:
+
+```powershell
+scoop install https://raw.githubusercontent.com/lukesampson/net-deploy/master/CLI/deploy.json
+```
