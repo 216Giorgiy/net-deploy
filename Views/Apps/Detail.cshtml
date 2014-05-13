@@ -32,9 +32,9 @@ State: <span class="state @state.Item2">@state.Item2</span>
     <a href="@Url.Action("log", new { id = ViewBag.id })" style="font-size:9pt;">see build log &rarr;</a>
 }
 
-<div>
+<!--div>
     Webhook: <code style="background-color:#eee;">@Request.Url.GetLeftPart(UriPartial.Authority)/apps/hook/@ViewBag.id</code>
-</div>
+</div-->
 <br />
 @using(Html.BeginForm(new { action = "build", id = @ViewBag.id })) {
     <input type="submit" value="build now" />
@@ -47,5 +47,27 @@ State: <span class="state @state.Item2">@state.Item2</span>
     <dd>@pair.Value</dd>
 }
 </dl>
+
+@section scripts {
+	<script>
+		var state = null;
+		function checkstate() {
+			$.get('/apps/state/@ViewBag.id', {}, function(res, textStatus) {
+				if(state != null && res != state) {
+					document.location.reload();
+				}
+				state = res;
+				var timeout = 60 * 1000; // 1 minute
+				if(state == 'building') {
+					timeout = 500; // 500 ms (check frequently while building)
+				}
+				setTimeout(checkstate, timeout);
+			});
+		}
+
+		checkstate();
+		
+	</script>
+}
 
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace deploy.Controllers {
 	
 	public class AppsController : BaseController {
+		static HashSet<string> Tokens = new HashSet<string>();
 
 		[Authorize]
 		public ActionResult Detail(string id) {
@@ -19,6 +20,12 @@ namespace deploy.Controllers {
 			ViewBag.logcreated = FileDB.LogCreated(id);
 
 			return View();
+		}
+
+		[Authorize]
+		public ActionResult State(string id) {
+			var state = FileDB.AppState(id);
+			return Content(state.Item2, "text");
 		}
 
 		[Authorize]
