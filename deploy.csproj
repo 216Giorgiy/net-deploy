@@ -147,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="CLI\lib\" />
+    <Folder Include="cli\lib\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -166,7 +166,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="nlog.config" />
-    <Content Include="CLI\bin\deploy.ps1" />
+    <Content Include="cli\bin\deploy.ps1" />
     <None Include="readme.md" />
     <Content Include="Scripts\msbuild\transform.msbuild" />
     <Content Include="Web.Debug.config">
