@@ -1,7 +1,7 @@
 ﻿#requires -v 3
 param($cmd)
 
-$_appname = 'deploy'
+$appname = 'deploy'
 
 set-strictmode -off
 
@@ -12,4 +12,4 @@ $commands = commands
 
 if (@($null, '-h', '--help', '/?') -contains $cmd) { exec 'help' $args }
 elseif ($commands -contains $cmd) { exec $cmd $args }
-else { "$_appname: '$cmd' isn't a $_appname command. See '$_appname help'"; exit 1 }
+else { "$appname: '$cmd' isn't a $appname command. See '$appname help'"; exit 1 }
