@@ -1,0 +1,8 @@
+{
+	"_comment": "This is a scoop manifest, see http://scoop.sh",
+	"homepage": "https://github.com/lukesampson/net-deploy",
+	"version": "0.2014.05.13",
+	"url": "https://github.com/lukesampson/net-deploy/archive/master.zip",
+	"extract_dir": "net-deploy-master/CLI",
+	"bin": "bin/deploy.ps1"
+}

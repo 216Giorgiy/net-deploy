@@ -6,3 +6,5 @@ obj
 App_Data/*
 .DS_Store
 Logs/*
+*.sublime-workspace
+*~
