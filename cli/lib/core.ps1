@@ -1,16 +1,17 @@
 # find the root directory containing .deploy
 function root() {
 	$dir = $pwd
-	while(!(test-path "$dir\.deploy")) {
-		$dir = split-path $dir;
-		if(!$dir) { return $null }
+	while($dir) {
+		if(test-path "$dir\.deploy") { return $dir }
+		$dir = split-path $dir
 	}
-	return $dir
 }
 
-function configpath() {
-	return "$(root)\.deploy"
+function configpath() {	"$(root)\.deploy" }
+function apiurl() {
+	gc (configpath)
 }
+
 
 function git_root() {
 	if(!(gcm git)) {
