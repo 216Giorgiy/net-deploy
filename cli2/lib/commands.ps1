@@ -1,5 +1,5 @@
 function command_files {
-	gci (relpath '..\libexec') | where { $_.name -match "$appname-.*?\.ps1$" }
+	gci "$psscriptroot\..\libexec" | where { $_.name -match "$appname-.*?\.ps1$" }
 }
 
 function commands {
@@ -11,5 +11,5 @@ function command_name($filename) {
 }
 
 function exec($cmd, $arguments) {
-	& (relpath "..\libexec\$appname-$cmd.ps1") @arguments
+	& "$psscriptroot\..\libexec\$appname-$cmd.ps1" @arguments
 }
