@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\AppsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\RootController.cs" />
@@ -126,6 +127,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppLock.cs" />
+    <Compile Include="Models\Auth.cs" />
     <Compile Include="Models\Builder.cs" />
     <Compile Include="Models\Cmd.cs" />
     <Compile Include="Models\FileDB.cs" />
@@ -135,6 +137,8 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\users.example.txt" />
+    <Content Include="App_Data\users.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\main.css" />
     <Content Include="Scripts\app.js" />
@@ -146,8 +150,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="cli\lib\" />
+    <Folder Include="Views\API\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

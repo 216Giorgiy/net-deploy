@@ -11,6 +11,7 @@ namespace deploy {
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 			routes.IgnoreRoute("favicon.ico");
 
+			routes.MapRoute("api", "api/{id}/{action}", new { controller = "api", action = "detail" });
 			routes.MapRoute("apps", "apps/{action}/{id}", new { controller = "apps", id = UrlParameter.Optional });
 
 			routes.MapRoute(

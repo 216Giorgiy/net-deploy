@@ -26,22 +26,22 @@ namespace deploy.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(string username, string password, string returnUrl) {
-            var passhash = ConfigurationManager.AppSettings["password"];
 
-            if(username == "admin" && BCryptHelper.CheckPassword(password, passhash)) {
-                int oneDay = 24 * 60;
-                var ticket = new FormsAuthenticationTicket(username, false, oneDay);
+			var res = Auth.Validate(username, password);
+			if(res.Item1) {
+				int oneDay = 24 * 60;
+				var ticket = new FormsAuthenticationTicket(username, false, oneDay);
 
-                HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
-                Response.Cookies.Add(cookie);
+				HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
+				Response.Cookies.Add(cookie);
 
-                LogService.Info("successful login for " + username);
-                if(!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
-                return RedirectToAction("index");
-            }
+				LogService.Info("successful login for " + username);
+				if(!string.IsNullOrEmpty(returnUrl)) return Redirect(returnUrl);
+				return RedirectToAction("index");
+			}
 
             LogService.Warn("failed login attempt for " + username);
-            TempData["flash"] = "invalid login";
+            TempData["flash"] = "Invalid login: " + res.Item2;
             return View();
         }
 

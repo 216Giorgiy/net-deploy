@@ -1,0 +1,15 @@
+﻿# This file contains a list of hashed user credentials that are allowed access
+# to the deploy website.
+#
+# The actual file used for authentication is /App_Data/users.txt
+#
+# You can generate entries for users.txt by using the 'deploy hash <username>' command
+# from the command-line interface.
+# 
+# Format is <username> <iterations>:<salt>:<password-hash>
+#
+# Empty lines and lines beginning with '#' are ignored.
+#
+# The example password below is 'secret'... obviously, don't use this in production!
+
+example 1000:74yy3SN/RsBUzSRID3RYr1oYygIsJwem:3rFZR3qt/Q/+AwkPKSxppl2VwtTvyiJR
