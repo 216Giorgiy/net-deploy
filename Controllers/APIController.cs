@@ -6,12 +6,13 @@ using System.Web.Mvc;
 
 namespace deploy.Controllers {
 
-	[UseRequireHttpsFromAppSettings]
+	[ConditionalHttps]
+	[BasicAuth]
 	public class APIController : Controller {
 
 		public ActionResult Detail(string id) {
 
-			return View();
+			return Content("Hi!");
 		}
 	}
 }
