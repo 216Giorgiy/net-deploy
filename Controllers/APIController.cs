@@ -8,9 +8,14 @@ using System.Web.Mvc;
 namespace deploy.Controllers {
 
 	[ConditionalHttps]
-	[BasicAuth]
 	public class APIController : Controller {
 
+		// Get /api/global/ping from CLI to check if this is a deploy server
+		public ActionResult Ping() {
+			return Content("net-deploy", "text/plain");
+		}
+
+		[BasicAuth]
 		public ActionResult Detail(string id) {
 			var state = FileDB.AppState(id);
 
@@ -20,6 +25,7 @@ namespace deploy.Controllers {
 			}, JsonRequestBehavior.AllowGet);
 		}
 
+		[BasicAuth]
 		public ActionResult Test(string id) {
 			Response.ContentType = "text/plain";
 			for(var i = 0; i < 10; i++) {

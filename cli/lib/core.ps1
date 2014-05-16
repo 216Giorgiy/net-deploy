@@ -11,6 +11,7 @@ function configpath() {	"$(root)\.deploy" }
 function config() {	(gc (configpath)) -split ' ' }
 function app() { (config)[0] }
 function baseurl() { (config)[1] }
+function apiurl($action) { "$(baseurl)/api/$(app)/$action" }
 
 function git_root() {
 	if(!(gcm git)) {
@@ -24,19 +25,6 @@ function git_root() {
 function abort($msg) { write-host $msg -f darkred; exit 1 }
 function success($msg) { write-host $msg -f darkgreen }
 function warn($msg) { write-host $msg -f darkyellow }
-
-# convert secure string back to string
-# from http://blogs.msdn.com/b/fpintos/archive/2009/06/12/how-to-properly-convert-securestring-to-string.aspx
-function unsecure($secure) {
-	$ptr = [intptr]::zero
-	$marshal = [runtime.interopservices.marshal]
-	try {
-		$ptr = $marshal::SecureStringToGlobalAllocUnicode($secure)
-		return $marshal::PtrToStringUni($ptr)
-	} finally {
-		$marshal::ZeroFreeGlobalAllocUnicode($ptr)
-	}
-}
 
 # http functions
 function host($url) {
@@ -62,12 +50,24 @@ function request($url, $username, $password) {
 	}
 }
 
-function ensure_creds($url) {
-	$creds = get_creds (host $url)
-	if($creds) { return $creds }
+# returns text, status
+function geturl($url) {
+	$wc = new-object net.webclient
 
-	$username = read-host 'username'
-	$password = unsecure (read-host 'password' -assecurestring)
-
-	
+	try {
+		$res = $wc.downloadstring($url)
+		return $res, 200
+	} catch [net.webexception] {
+		$res = $_.exception.response
+		$status = $res.statuscode -as [int]
+		$s = $res.getresponsestream()
+		$sr = new-object io.streamreader $s
+		try {
+			return $sr.readtoend(), $status
+			return $text, $status
+		} finally {
+			$sr.dispose()
+		}
+	}
 }
+

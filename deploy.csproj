@@ -148,7 +148,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="cli\lib\" />
     <Folder Include="Views\API\" />
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +167,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="nlog.config" />
-    <Content Include="cli\bin\deploy.ps1" />
     <None Include="readme.md" />
     <Content Include="Scripts\msbuild\transform.msbuild" />
     <Content Include="Web.Debug.config">

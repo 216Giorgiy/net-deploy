@@ -1,6 +1,8 @@
 $src = '
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Text;
 
 public static class Native {
 	[DllImport("advapi32.dll", EntryPoint = "CredReadW", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -29,7 +31,7 @@ public static class Native {
 		public string userName;
 	}
 
-	public static string[] Cred(string target) {
+	public static string[] Creds(string target) {
 		IntPtr credPtr = IntPtr.Zero;
 		var ok = Native.CredRead(target, 1, 0, out credPtr);
 		if(!ok) return null;
@@ -56,7 +58,7 @@ public static class Native {
 }
 ';
 
-if(!([native] -as [type])) {
+if(!('native' -as [type])) {
 	add-type $src
 }
 
@@ -66,4 +68,25 @@ function get_creds($target) {
 
 function set_creds($target, $username, $password) {
 	[native]::creds($target, $username, $password)
+}
+
+# convert secure string back to string
+# from http://blogs.msdn.com/b/fpintos/archive/2009/06/12/how-to-properly-convert-securestring-to-string.aspx
+function unsecure($secure) {
+	$ptr = [intptr]::zero
+	$marshal = [runtime.interopservices.marshal]
+	try {
+		$ptr = $marshal::SecureStringToGlobalAllocUnicode($secure)
+		return $marshal::PtrToStringUni($ptr)
+	} finally {
+		$marshal::ZeroFreeGlobalAllocUnicode($ptr)
+	}
+}
+
+function ensure_creds($url) {
+	$creds = get_creds (host $url)
+	if($creds) { return $creds }
+
+	$username = read-host 'username'
+	$password = unsecure (read-host 'password' -assecurestring)
 }
