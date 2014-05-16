@@ -4,12 +4,20 @@
 . "$psscriptroot\..\lib\core.ps1"
 
 $root = root
+$git_root = git_root
 
 if(!$root) {
-	warn "no deploy config: use deploy init"
+	if($git_root) {
+		warn "no deploy config: use deploy init"	
+	} else {
+		abort "no deploy config, and not inside git repo"
+	}
 } else {
-	"Deploy URL: $(apiurl)"
-	"Deploy root: $root"
+	"App: $(app)"
+	"Deploy URL: $(baseurl)"
+	"Local root: $root"
 }
 
-"Git root: $(git_root)"
+if($git_root) {
+	"Git root: $(git_root)"
+}

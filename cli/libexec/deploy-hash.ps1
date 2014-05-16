@@ -29,19 +29,6 @@ function pbkdf2($password, $salt, $iterations, $bytesize) {
 	$pbkdf2.getbytes($bytesize)
 }
 
-# convert secure string back to string
-# from http://blogs.msdn.com/b/fpintos/archive/2009/06/12/how-to-properly-convert-securestring-to-string.aspx
-function unsecure($secure) {
-	$ptr = [intptr]::zero
-	$marshal = [runtime.interopservices.marshal]
-	try {
-		$ptr = $marshal::SecureStringToGlobalAllocUnicode($secure)
-		return $marshal::PtrToStringUni($ptr)
-	} finally {
-		$marshal::ZeroFreeGlobalAllocUnicode($ptr)
-	}
-}
-
 $password = unsecure (read-host "password for $username" -assecurestring)
 $confirm = unsecure (read-host "re-enter password" -assecurestring)
 
