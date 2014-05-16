@@ -18,7 +18,7 @@ namespace deploy.Controllers {
 
         public ActionResult Logout() {
             FormsAuthentication.SignOut();
-            TempData["flash"] = "You've been logged out";
+            TempData["flash"] = "You've logged out";
             return RedirectToAction("login");
         }
 

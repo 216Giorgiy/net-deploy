@@ -13,10 +13,21 @@ namespace deploy.Controllers {
 
 		public ActionResult Detail(string id) {
 			var state = FileDB.AppState(id);
+
 			return Json(new {
 				state = state.Item2,
-				date = state.Item1 == null ? (int?)null: (int)(state.Item1.Value - new DateTime(1970,1,1)).TotalMilliseconds
+				date = state.Item1.JSDate()
 			}, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult Test(string id) {
+			Response.ContentType = "text/plain";
+			for(var i = 0; i < 10; i++) {
+				Response.Write("i: " + i + "\n");
+				Response.Flush();
+				System.Threading.Thread.Sleep(500);
+			}
+			return new EmptyResult();
 		}
 	}
 }

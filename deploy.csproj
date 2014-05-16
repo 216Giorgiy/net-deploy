@@ -121,6 +121,7 @@
     <Compile Include="Controllers\BasicAuth.cs" />
     <Compile Include="Controllers\RootController.cs" />
     <Compile Include="Controllers\ConditionalHttps.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
