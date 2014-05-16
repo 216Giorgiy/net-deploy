@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using deploy.Models;
 using System.Web.Security;
-using DevOne.Security.Cryptography.BCrypt;
 using System.Configuration;
 using System.Web.UI;
 
