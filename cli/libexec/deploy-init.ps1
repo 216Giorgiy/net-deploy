@@ -46,7 +46,7 @@ if(($text -ne 'net-deploy') -or ($code -ne 200)) {
 	abort "$url doesn't look like a deploy server"
 }
 
-$null = ensure_creds (apiurl 'detail' $url $app)
+$null = ensure_creds $url $app
 
 "$app $url" | out-file "$git_root\.deploy" -encoding ascii
 

@@ -100,9 +100,16 @@ function check_creds($url, $username, $password) {
 	}
 }
 
-function ensure_creds($url) {
-	$saved = get_creds (host $url)
-	if($saved -and (check_creds $url @saved)) { return $saved }
+function ensure_creds($baseurl, $app) {
+	if(!$baseurl) { $baseurl = baseurl }
+	if(!$app) { $app = app }
+
+	$baseurl = host $baseurl # just in case
+
+	$checkurl = apiurl 'detail' $baseurl $app
+
+	$saved = get_creds $baseurl
+	if($saved -and (check_creds $checkurl @saved)) { return $saved }
 
 	$username = read-host 'deploy username'
 
@@ -110,13 +117,13 @@ function ensure_creds($url) {
 	for($i = 0; $i -lt $max_attempts; $i++) {
 		$password = unsecure (read-host "password for $username" -assecurestring)
 		
-		if(check_creds $url $username $password) { break }
+		if(check_creds $checkurl $username $password) { break }
 		write-host "invalid password"
 		if($i -eq $max_attempts - 1) {
 			abort "aborting after $max_attempts failed password attempts"
 		}
 	}
 
-	set_creds (host $url) $username $password
+	set_creds $baseurl $username $password
 	$username, $password
 }

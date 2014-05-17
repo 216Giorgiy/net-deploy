@@ -7,7 +7,7 @@
 $url = apiurl 'build'
 
 write-host 'authenticating...'
-$username, $password = ensure_creds $url
+$username, $password = ensure_creds
 
 write-host 'starting build...'
 request $url $username $password
