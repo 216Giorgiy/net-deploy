@@ -26,6 +26,21 @@ namespace deploy.Controllers {
 		}
 
 		[BasicAuth]
+		public ActionResult Build(string id) {
+			var builder = new Builder(id);
+
+			Response.ContentType = "text/plain";
+			builder.LogHook = (message) => Response.Send(message);
+			try {
+				builder.Build();
+			} catch(Exception e) {
+				Response.Send(e.ToString());
+			}
+
+			return new EmptyResult();
+		}
+
+		[BasicAuth]
 		public ActionResult Test(string id) {
 			Response.ContentType = "text/plain";
 			for(var i = 0; i < 10; i++) {

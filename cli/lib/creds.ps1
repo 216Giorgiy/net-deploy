@@ -38,7 +38,12 @@ public static class Native {
 
 		// Decode the credential
 		var cred = (Native.CREDENTIAL)Marshal.PtrToStructure(credPtr, typeof(Native.CREDENTIAL));
-		return new string[] { cred.userName, Marshal.PtrToStringAuto(cred.credentialBlob) };
+
+		var bytes = new byte[cred.credentialBlobSize];
+		Marshal.Copy(cred.credentialBlob, bytes, 0, cred.credentialBlobSize);
+		var password = Encoding.Unicode.GetString(bytes);
+		
+		return new string[] { cred.userName, password };
 	}
 
 	public static void Creds(string target, string username, string password) {
@@ -85,20 +90,27 @@ function unsecure($secure) {
 
 function check_creds($url, $username, $password) {
 	$res, $status = geturl $url $username $password
-	return $status -eq 200
+	switch($status) {
+		200 { return $true }
+		401 { return $false }
+		-1 { abort "error accessing $url`: $res" } # exception with no response
+		default {
+			abort "unexpected HTTP status code $status`:`n$res"
+		}
+	}
 }
 
 function ensure_creds($url) {
 	$saved = get_creds (host $url)
 	if($saved -and (check_creds $url @saved)) { return $saved }
 
-	$username = read-host 'username'
+	$username = read-host 'deploy username'
 
 	$max_attempts = 3
 	for($i = 0; $i -lt $max_attempts; $i++) {
 		$password = unsecure (read-host "password for $username" -assecurestring)
 		
-		if($status -eq 200) { break }
+		if(check_creds $url $username $password) { break }
 		write-host "invalid password"
 		if($i -eq $max_attempts - 1) {
 			abort "aborting after $max_attempts failed password attempts"

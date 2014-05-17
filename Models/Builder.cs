@@ -9,6 +9,7 @@ using System.Web.Hosting;
 
 namespace deploy.Models {
 	public class Builder {
+		public Action<string> LogHook;
 
 		string _id;
 		string _appdir;
@@ -198,6 +199,7 @@ namespace deploy.Models {
 
 		private void Log(string message) {
 			File.AppendAllText(_logfile, message + "\r\n");
+			if(LogHook != null) LogHook(message);
 		}
 	}
 }

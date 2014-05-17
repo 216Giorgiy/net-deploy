@@ -62,6 +62,7 @@ function geturl($url, $username, $password) {
 		return $res, 200
 	} catch [net.webexception] {
 		$res = $_.exception.response
+		if(!$res) { return $_.exception.message, -1 }
 		$status = $res.statuscode -as [int]
 		$s = $res.getresponsestream()
 		$sr = new-object io.streamreader $s
@@ -71,5 +72,12 @@ function geturl($url, $username, $password) {
 			$sr.dispose()
 		}
 	}
+}
+
+function getstate($username, $password) {
+	$url = apiurl 'detail'
+	$json, $status = geturl $url $username $password
+	if($status -ne 200) { abort "server returned $status`: $json" }
+	return convertfrom-json $json
 }
 

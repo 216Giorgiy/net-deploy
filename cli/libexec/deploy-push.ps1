@@ -4,11 +4,13 @@
 . "$psscriptroot/../lib/core.ps1"
 . "$psscriptroot/../lib/creds.ps1"
 
-$url = 'http://windows:8083/api/promo/test'
+$url = apiurl 'build'
 
+write-host 'authenticating...'
 $username, $password = ensure_creds $url
 
-$username = 'example'
-$password = 'secret'
-
+write-host 'starting build...'
 request $url $username $password
+
+$state = getstate $username $password
+write-host "server state: $($state.state)"

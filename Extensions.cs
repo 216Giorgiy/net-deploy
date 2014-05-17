@@ -12,5 +12,10 @@ namespace deploy {
 
 			return (long)(date.Value - new DateTime(1970, 1, 1)).TotalMilliseconds;
 		}
+
+		public static void Send(this HttpResponseBase response, string message) {
+			response.Write(message + "\n");
+			response.Flush();
+		}
 	}
 }
