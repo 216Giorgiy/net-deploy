@@ -13,6 +13,7 @@
 param($name, $url)
 
 . "$psscriptroot\..\lib\core.ps1"
+. "$psscriptroot\..\lib\creds.ps1"
 . "$psscriptroot\..\lib\help.ps1"
 . "$psscriptroot\..\lib\getopt.ps1"
 
@@ -44,6 +45,8 @@ $text, $code = geturl $pingurl
 if(($text -ne 'net-deploy') -or ($code -ne 200)) {
 	abort "$url doesn't look like a deploy server"
 }
+
+$null = ensure_creds (apiurl 'detail')
 
 "$name $url" | out-file "$git_root\.deploy" -encoding ascii
 

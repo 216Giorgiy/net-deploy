@@ -51,8 +51,11 @@ function request($url, $username, $password) {
 }
 
 # returns text, status
-function geturl($url) {
+function geturl($url, $username, $password) {
 	$wc = new-object net.webclient
+	if($username) {
+		$wc.credentials = new-object net.networkcredential $username, $password
+	}
 
 	try {
 		$res = $wc.downloadstring($url)
@@ -64,7 +67,6 @@ function geturl($url) {
 		$sr = new-object io.streamreader $s
 		try {
 			return $sr.readtoend(), $status
-			return $text, $status
 		} finally {
 			$sr.dispose()
 		}

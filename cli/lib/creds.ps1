@@ -83,10 +83,28 @@ function unsecure($secure) {
 	}
 }
 
+function check_creds($url, $username, $password) {
+	$res, $status = geturl $url $username $password
+	return $status -eq 200
+}
+
 function ensure_creds($url) {
-	$creds = get_creds (host $url)
-	if($creds) { return $creds }
+	$saved = get_creds (host $url)
+	if($saved -and (check_creds $url @saved)) { return $saved }
 
 	$username = read-host 'username'
-	$password = unsecure (read-host 'password' -assecurestring)
+
+	$max_attempts = 3
+	for($i = 0; $i -lt $max_attempts; $i++) {
+		$password = unsecure (read-host "password for $username" -assecurestring)
+		
+		if($status -eq 200) { break }
+		write-host "invalid password"
+		if($i -eq $max_attempts - 1) {
+			abort "aborting after $max_attempts failed password attempts"
+		}
+	}
+
+	set_creds (host $url) $username $password
+	$username, $password
 }
