@@ -5,13 +5,18 @@ function root() {
 		if(test-path "$dir\.deploy") { return $dir }
 		$dir = split-path $dir
 	}
+	return $null
 }
 
 function configpath() {	"$(root)\.deploy" }
 function config() {	(gc (configpath)) -split ' ' }
 function app() { (config)[0] }
 function baseurl() { (config)[1] }
-function apiurl($action) { "$(baseurl)/api/$(app)/$action" }
+function apiurl($action, $baseurl, $app) {
+	if(!$baseurl) { $baseurl = baseurl }
+	if(!$app) { $app = app }
+	"$baseurl/api/$app/$action"
+}
 
 function git_root() {
 	if(!(gcm git)) {
