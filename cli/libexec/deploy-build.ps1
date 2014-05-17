@@ -1,5 +1,5 @@
-# Usage: deploy push
-# Summary: Push changes to deploy
+# Usage: deploy [build]
+# Summary: Build on server
 
 . "$psscriptroot/../lib/core.ps1"
 . "$psscriptroot/../lib/creds.ps1"

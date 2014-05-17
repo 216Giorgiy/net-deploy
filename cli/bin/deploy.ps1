@@ -10,7 +10,7 @@ set-strictmode -off
 
 $commands = commands
 
-if(!$cmd) { $cmd = 'push' }
+if(!$cmd) { $cmd = 'build' }
 
 if (@('-h', '--help', '/?') -contains $cmd) { exec 'help' $args }
 elseif ($commands -contains $cmd) { exec $cmd $args }
