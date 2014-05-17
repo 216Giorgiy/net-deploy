@@ -8,6 +8,7 @@
 param($username)
 
 . "$psscriptroot\..\lib\core.ps1"
+. "$psscriptroot\..\lib\creds.ps1"
 . "$psscriptroot\..\lib\help.ps1"
 
 if(!$username) { my_usage; exit 1 }
