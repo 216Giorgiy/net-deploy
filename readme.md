@@ -84,5 +84,5 @@ If it's still not working, you might need to do some debugging by running as the
 To install the CLI (a work in progress), first install [Scoop](http://scoop.sh) and then run:
 
 ```powershell
-scoop install https://raw.githubusercontent.com/lukesampson/net-deploy/master/CLI/deploy.json
+scoop install https://raw.githubusercontent.com/lukesampson/net-deploy/master/cli/deploy.json
 ```
