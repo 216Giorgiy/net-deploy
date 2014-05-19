@@ -123,7 +123,7 @@ namespace deploy.Models {
 		private void Msbuild() {
             var msbuild = _config["msbuild"];
 
-			var buildver = Regex.Replace(msbuild, @".*\Microsoft.NET\", @"..\");
+			var buildver = Regex.Replace(msbuild, @".*\\Microsoft.NET\\", @"..\");
 
 			Log("-> building with " + buildver + " (" + _buildconfig + " config)");
 
