@@ -99,7 +99,7 @@ namespace deploy.Models {
             var scriptpath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Scripts\\msbuild");
 
             var candidates = Directory.GetFiles(_workingdir, "web.config", SearchOption.AllDirectories);
-            Log("     found " + candidates.Length + " web.config files");
+            //Log("     found " + candidates.Length + " web.config files");
             foreach(var webConfig in candidates) {
                 var dir = Path.GetDirectoryName(webConfig);
                 var transform = Path.Combine(dir, "web." + _buildconfig + ".config");
