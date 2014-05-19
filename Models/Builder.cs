@@ -125,7 +125,7 @@ namespace deploy.Models {
 
 			var buildver = Regex.Replace(msbuild, @".*\\Microsoft.NET\\", @"..\");
 
-			Log("-> building with " + buildver + " (" + _buildconfig + " config)");
+			Log("-> building with " + buildver + " (" + _buildconfig + ")");
 
 			string parameters = "";
             if(_buildconfig != null) {
@@ -145,7 +145,7 @@ namespace deploy.Models {
 
 			if(string.IsNullOrWhiteSpace(deploy_to)) throw new Exception("deploy_to not specified in config");
 
-			Log(" -> deploying to " + deploy_to);
+			Log("-> deploying to " + deploy_to);
 
 			var source = string.IsNullOrEmpty(deploy_base) ? _workingdir : Path.Combine(_workingdir, deploy_base);
 
