@@ -92,7 +92,7 @@ namespace deploy.Models {
         }
 
         private void Transform() {
-            Log("-> running web.config transforms");
+            Log("-> transforming web.configs");
 
             var msbuild = ConfigurationManager.AppSettings["msbuild"];
 
