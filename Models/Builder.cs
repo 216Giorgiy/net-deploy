@@ -69,16 +69,16 @@ namespace deploy.Models {
 
 			if(!Directory.Exists(_sourcedir)) {
 				Directory.CreateDirectory(_sourcedir);
-				Log("-> doing git clone");
+				Log("-> cloning git repo");
 				Cmd.Run("git clone " + giturl + " source", runFrom: _appdir, logPath: _logfile).EnsureCode(0);
 			} else {
-				Log("-> doing git pull");
+				Log("-> pulling git changes");
 				Cmd.Run("git pull " + giturl, runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
 			}
 		}
 
 		private void NugetRefresh() {
-			Log("-> doing nuget refresh");
+			Log("-> refreshing nuget packages");
 			Cmd.Run("echo off && for /r . %f in (packages.config) do if exist %f echo found %f && nuget i \"%f\" -o packages", runFrom: _sourcedir, logPath: _logfile)
 				.EnsureCode(0);
 		}
@@ -99,9 +99,8 @@ namespace deploy.Models {
             var scriptpath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Scripts\\msbuild");
 
             var candidates = Directory.GetFiles(_workingdir, "web.config", SearchOption.AllDirectories);
-            Log("found " + candidates.Length + " web.config files");
+            Log("     found " + candidates.Length + " web.config files");
             foreach(var webConfig in candidates) {
-
                 var dir = Path.GetDirectoryName(webConfig);
                 var transform = Path.Combine(dir, "web." + _buildconfig + ".config");
                 if(File.Exists(transform)) {
@@ -124,7 +123,9 @@ namespace deploy.Models {
 		private void Msbuild() {
             var msbuild = _config["msbuild"];
 
-			Log("-> building with " + msbuild + " (" + _buildconfig + " config)");
+			var buildver = Regex.Replace(msbuild, @".*\Microsoft.NET\", @"..\");
+
+			Log("-> building with " + buildver + " (" + _buildconfig + " config)");
 
 			string parameters = "";
             if(_buildconfig != null) {
@@ -153,7 +154,6 @@ namespace deploy.Models {
 			List<string> simple;
 			List<string> paths;
 			GetIgnore(source, deploy_to, deploy_ignore, out simple, out paths);
-			Log("got ignore paths");
 
 			var xf = new List<string>(simple);
 			var xd = new List<string>(simple);
