@@ -6,6 +6,7 @@ using System.IO;
 using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Web.Hosting;
+using System.Net;
 
 namespace deploy.Models {
 	public class Builder {
@@ -35,6 +36,7 @@ namespace deploy.Models {
                     Transform();
 					Msbuild();
 					Deploy();
+					WarmUp();
 
 					Log("-> build completed");
 					FileDB.AppState(_id, "idle");
@@ -163,6 +165,16 @@ namespace deploy.Models {
 			var xd_arg = xd.Count > 0 ? " /xd " + string.Join(" ", xd) : null;
 
 			Cmd.Run("\"robocopy . \"" + deploy_to + "\" /s /purge /nfl /ndl " + xf_arg + xd_arg + "\"", runFrom: source, logPath: _logfile);
+		}
+
+		private void WarmUp() {
+			string warmup;
+			_config.TryGetValue("warmup_url", out warmup);
+			if(!string.IsNullOrEmpty(warmup)) {
+				Log("-> warming up");
+				var req = WebRequest.CreateHttp(warmup);
+				var res = req.GetResponse() as HttpWebResponse;
+			}
 		}
 
 		private void GetIgnore(string source, string dest, string ignore_str, out List<string> simple, out List<string> paths) {
