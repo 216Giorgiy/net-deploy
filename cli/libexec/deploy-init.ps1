@@ -48,6 +48,11 @@ if(($text -ne 'net-deploy') -or ($code -ne 200)) {
 
 $null = ensure_creds $url $app
 
-"$app $url" | out-file "$git_root\.deploy" -encoding ascii
+$config = @{
+	app = $app;
+	url = $url;
+}
+
+convertto-json $config | out-file "$git_root\deploy.json" -encoding ascii
 
 success "initialized!"

@@ -2,16 +2,19 @@
 function root() {
 	$dir = $pwd
 	while($dir) {
-		if(test-path "$dir\.deploy") { return $dir }
+		if(test-path "$dir\deploy.json") { return $dir }
 		$dir = split-path $dir
 	}
 	return $null
 }
 
-function configpath() {	"$(root)\.deploy" }
-function config() {	(gc (configpath)) -split ' ' }
-function app() { (config)[0] }
-function baseurl() { (config)[1] }
+function configpath() {	"$(root)\deploy.json" }
+function config() {
+	if(!(test-path (configpath))) { return $null }
+	convertfrom-json (gc (configpath) -raw)
+}
+function app() { (config).app }
+function baseurl() { (config).url }
 function apiurl($action, $baseurl, $app) {
 	if(!$baseurl) { $baseurl = baseurl }
 	if(!$app) { $app = app }
