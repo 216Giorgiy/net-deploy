@@ -71,17 +71,22 @@ namespace deploy.Models {
 			_config.TryGetValue("git_branch", out git_branch);
 			if(string.IsNullOrEmpty(giturl)) throw new Exception("git missing from config");
 
-			var git_branch_param = "";
-			if(git_branch != null) {
-				git_branch_param = " -b " + git_branch;
-			}
 
 			if(!Directory.Exists(_sourcedir)) {
 				Directory.CreateDirectory(_sourcedir);
 				Log("-> cloning git repo");
+				var git_branch_param = "";
+				if(git_branch != null) {
+					git_branch_param = " -b " + git_branch;
+				}
+
 				Cmd.Run("git clone " + giturl + " source" + git_branch_param,
 					runFrom: _appdir, logPath: _logfile).EnsureCode(0);
 			} else {
+				var git_branch_param = "";
+				if(git_branch != null) {
+					git_branch_param = " " + git_branch;
+				}
 				Log("-> pulling git changes");
 				Cmd.Run("git pull " + giturl + git_branch_param, runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
 			}
