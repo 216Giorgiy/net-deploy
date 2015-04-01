@@ -83,12 +83,10 @@ namespace deploy.Models {
 				Cmd.Run("git clone " + giturl + " source" + git_branch_param,
 					runFrom: _appdir, logPath: _logfile).EnsureCode(0);
 			} else {
-				var git_branch_param = "";
-				if(git_branch != null) {
-					git_branch_param = " " + git_branch;
-				}
 				Log("-> pulling git changes");
-				Cmd.Run("git pull " + giturl + git_branch_param, runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+				Cmd.Run("git fetch --all", runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+				Cmd.Run("git reset --hard origin/" + git_branch ?? "master",
+					runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
 			}
 		}
 
