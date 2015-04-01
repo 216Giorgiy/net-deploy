@@ -69,6 +69,9 @@ namespace deploy.Models {
 			var giturl = _config["git"];
 			string git_branch = null;
 			_config.TryGetValue("git_branch", out git_branch);
+			if(string.IsNullOrWhiteSpace(git_branch)) {
+				git_branch = null;
+			}
 			if(string.IsNullOrEmpty(giturl)) throw new Exception("git missing from config");
 
 
@@ -85,7 +88,7 @@ namespace deploy.Models {
 			} else {
 				Log("-> pulling git changes");
 				Cmd.Run("git fetch --all", runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
-				Cmd.Run("git reset --hard origin/" + git_branch ?? "master",
+				Cmd.Run("git reset --hard origin/" + (git_branch ?? "master"),
 					runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
 			}
 		}
