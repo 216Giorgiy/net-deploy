@@ -9,15 +9,21 @@
 $root = root
 $changes = git status --porcelain
 
-$changes | % {
-    $type, $path = $_.substring(0,2), "$root\$($_.substring(3))"
+# only process files that Git thinks are text
+pushd $root
+$non_binary = git grep -I --name-only -e "" -- .
+popd
 
-    if($type -ne ' D') {
-        $content = [io.file]::readalltext($path)
+$changes | % {
+    $type, $path = $_.substring(0,2), $_.substring(3)
+
+    if(($type -ne ' D') -and ($path -in $non_binary)) {
+        $fullpath = resolve-path "$root/$path"
+        $content = [io.file]::readalltext($fullpath)
         if($content | sls "[^`r]`n") {
             write-host "Fixing line endings for $path..." -nonewline
-            $content = gc $path
-            $content | sc $path
+            $content = gc $fullpath
+            $content | sc $fullpath
             write-host 'done.'
         }
     }
