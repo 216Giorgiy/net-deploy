@@ -137,6 +137,12 @@ namespace deploy.Models {
         }
 
 		private void Msbuild() {
+			var buildable = Directory.GetFiles(_workingdir, "*.sln,*.csproj,*.vbproj");
+			if(buildable.Length == 0) {
+				Log("-> nothing to build");
+				return; // nothing to build
+			}
+
             var msbuild = _config["msbuild"];
 
 			var buildver = Regex.Replace(msbuild, @".*\\Microsoft.NET\\", @"..\");
