@@ -137,8 +137,11 @@ namespace deploy.Models {
         }
 
 		private void Msbuild() {
-			var buildable = Directory.GetFiles(_workingdir, "*.sln,*.csproj,*.vbproj");
-			if(buildable.Length == 0) {
+			Func<string, bool> hasFiles = (string s) => {
+				return Directory.GetFiles(_workingdir, s).Length > 0;
+			};
+
+			if(!hasFiles("*.sln") && !hasFiles("*.csproj") && !hasFiles("*.vbproj")) {
 				Log("-> nothing to build");
 				return; // nothing to build
 			}
