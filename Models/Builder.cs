@@ -87,9 +87,16 @@ namespace deploy.Models {
 					runFrom: _appdir, logPath: _logfile).EnsureCode(0);
 			} else {
 				Log("-> pulling git changes");
-				Cmd.Run("git fetch --all", runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
-				Cmd.Run("git reset --hard origin/" + (git_branch ?? "master"),
-					runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+				if(git_branch != null) {
+					// force pull for branches that might have been rebased
+					Cmd.Run("git fetch --all", runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+					Cmd.Run("git reset --hard origin/" + (git_branch ?? "master"),
+						runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+				} else {
+					// quick pull
+					Cmd.Run("git pull", runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+				}
+				
 			}
 		}
 
