@@ -10,3 +10,4 @@ Logs/*
 *.sublime-workspace
 *~
 /deploy.json
+cli/py/__pycache__/*
