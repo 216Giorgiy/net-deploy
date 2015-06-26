@@ -101,7 +101,7 @@ exports.geturl = function(address, username, password, fn) {
       text += chunk.toString();
     });
     res.on('end', function() {
-      fn(res.statusCode, text)
+      fn(res.statusCode, text);
     })
   });
 }
