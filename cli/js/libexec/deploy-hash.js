@@ -1,7 +1,7 @@
 var core = require('../lib/core.js');
 var pbkdf2 = require('pbkdf2');
 var crypto = require('crypto');
-
+var read = require('read');
 
 const ITERATIONS = 1000;
 const SALT_SIZE = 24;
@@ -12,10 +12,9 @@ exports.exec = function(username) {
     core.abort('username is required');
   }
 
-  core.getpass('password: ', function(err, password) {
+  read({ prompt: 'password: ', silent: true, replace: '*' }, function(err, password) {
     if(err) { process.exit(1); }
     
-    console.log("oh, so your password is " + password);
     var salt = crypto.randomBytes(SALT_SIZE);
     var hash = pbkdf2.pbkdf2Sync(password, salt, ITERATIONS, HASH_SIZE, 'sha1');
 
