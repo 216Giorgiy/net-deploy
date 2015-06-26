@@ -1,12 +1,9 @@
 import core
-import getpass
+import creds
 
 url = core.apiurl('build')
-
-username = input('username: ')
-password = getpass.getpass('password: ')
+username, password = creds.get(core.host(url))
 
 print('starting build...')
 
 core.request(url, username, password)
-
