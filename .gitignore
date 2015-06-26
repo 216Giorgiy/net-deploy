@@ -11,3 +11,4 @@ Logs/*
 *~
 /deploy.json
 cli/py/__pycache__/*
+cli/js/node_modules/*

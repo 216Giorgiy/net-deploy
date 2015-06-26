@@ -1,0 +1,25 @@
+{
+  "name": "net-deploy",
+  "version": "1.0.0",
+  "description": "CLI for deploying websites to Windows servers",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/lukesampson/net-deploy.git"
+  },
+  "author": "Luke Sampson <me@lukesampson.com>",
+  "license": "ISC",
+  "preferGlobal": true,
+  "bin": {
+    "deploy": "index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/lukesampson/net-deploy/issues"
+  },
+  "homepage": "https://github.com/lukesampson/net-deploy",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
+}
