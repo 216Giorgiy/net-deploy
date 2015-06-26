@@ -4,6 +4,10 @@ var creds = require('../lib/creds.js')
 exports.exec = function() {
   var url = core.apiurl('build');
 
+  if(!url) {
+  	core.abort('no deploy project found');
+  }
+
   console.log('authenticating...');
   var auth = creds.ensure(function(username, password) {
     console.log('starting build...')

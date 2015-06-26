@@ -36,12 +36,16 @@ var root = exports.root = function() {
 }
 
 configpath = function() {
-  return path.join(root(), "deploy.json");
+  var rootdir = root();
+  if(rootdir) {
+    return path.join(rootdir, "deploy.json"); 
+  }
+  return null;
 }
 
 var config = exports.config = function() {
   var path = configpath();
-  if(!exists(path)) return null;
+  if(!path || !exists(path)) return null;
 
   var contents = fs.readFileSync(path,
     { encoding: 'utf-8' });
@@ -50,14 +54,19 @@ var config = exports.config = function() {
 }
 
 var app = exports.app = function() {
-  return config().app;
+  var cfg = config();
+  if(!cfg) { return null; }
+  return cfg.app;
 }
 var baseurl = exports.baseurl = function() {
+  var cfg = config();
+  if(!cfg) { return null; }
   return config().url;
 }
 
 exports.apiurl = function(action, url, appName) {
   url = url || baseurl();
+  if(!url) return null;
   appName = appName || app();
   return url + "/api/" + appName + "/" + action;
 }
