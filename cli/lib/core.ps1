@@ -1,4 +1,4 @@
-# find the root directory containing .deploy
+# find the root directory containing deploy.json
 function root() {
 	$dir = $pwd
 	while($dir) {
@@ -88,4 +88,3 @@ function getstate($username, $password) {
 	if($status -ne 200) { abort "server returned $status`: $json" }
 	return convertfrom-json $json
 }
-
