@@ -1,8 +1,11 @@
 // Usage: deploy [build]
-// Summary: Build on server
+// Summary: Deploy to server
+// Help: Use this command to deploy the committed changes on the server.
+//
+// This is the default command, so you can just type 'deploy' to run it.
 
-var core = require('../lib/core.js');
-var creds = require('../lib/creds.js')
+var core = require('../lib/core');
+var creds = require('../lib/creds')
 
 exports.exec = function() {
   var url = core.apiurl('build');

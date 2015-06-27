@@ -1,7 +1,7 @@
 // Usage: deploy help <command>
 // Summary: Show help for a command
-var commands = require('../lib/commands.js');
-var help = require('../lib/help.js');
+var commands = require('../lib/commands');
+var help = require('../lib/help');
 var fs = require('fs');
 var path = require('path')
 

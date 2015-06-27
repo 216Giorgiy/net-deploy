@@ -6,11 +6,11 @@
 //
 // It outputs a line in the format "username iterations:salt:hash"
 
-var core = require('../lib/core.js');
+var core = require('../lib/core');
+var help = require('../lib/help');
 var pbkdf2 = require('pbkdf2');
 var crypto = require('crypto');
 var read = require('read');
-var help = require('../lib/help.js');
 
 const ITERATIONS = 1000;
 const SALT_SIZE = 24;

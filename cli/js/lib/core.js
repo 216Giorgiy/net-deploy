@@ -3,6 +3,7 @@ var readline = require('readline');
 var path = require('path');
 var fs = require('fs');
 var url = require('url');
+var child_process = require('child_process');
 
 var abort = exports.abort = function(msg) {
   console.log(msg.red);
@@ -17,6 +18,13 @@ var exists = exports.exists = function(path) {
   } catch(err) {
     return false;
   }
+}
+
+exports.hasarg = function(arguments, find) {
+  var a = arguments;
+  return Object.keys(a)
+    .map(function(k) { return a[k]; })
+    .indexOf(find) > -1
 }
 
 // find the root directory containing deploy.json
@@ -38,7 +46,7 @@ var root = exports.root = function() {
 configpath = function() {
   var rootdir = root();
   if(rootdir) {
-    return path.join(rootdir, "deploy.json"); 
+    return path.join(rootdir, "deploy.json");
   }
   return null;
 }
@@ -69,6 +77,18 @@ exports.apiurl = function(action, url, appName) {
   if(!url) return null;
   appName = appName || app();
   return url + "/api/" + appName + "/" + action;
+}
+
+exports.git_root = function() {
+  var res;
+  try {
+    res = child_process.execSync('git rev-parse --show-toplevel',
+      { stdio: 'pipe'} );
+    return res.toString().trim();
+  } catch(err) {
+    console.log(err.stderr.toString());
+    process.exit(1);
+  }
 }
 
 // http functions
