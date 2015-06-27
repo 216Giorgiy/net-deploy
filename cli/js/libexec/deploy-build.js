@@ -1,3 +1,6 @@
+// Usage: deploy [build]
+// Summary: Build on server
+
 var core = require('../lib/core.js');
 var creds = require('../lib/creds.js')
 

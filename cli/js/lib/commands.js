@@ -27,3 +27,12 @@ exports.exec = function(appname, cmd, arguments) {
 
   script.exec.apply(this, arguments);
 }
+
+var cmdpath = exports.path = function(appname, cmdname) {
+  return path.join(__dirname, '..', 'libexec', appname + '-' + cmdname + '.js');
+}
+
+exports.text = function(appname, cmdname) {
+  var filePath = cmdpath(appname, cmdname);
+  return fs.readFileSync(filePath, { encoding: 'utf8' });
+}
