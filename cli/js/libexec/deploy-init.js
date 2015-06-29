@@ -12,6 +12,9 @@
 //   --reinit: re-init a project that's already been init'd
 var help = require('../lib/help');
 var core = require('../lib/core');
+var creds = require('../lib/creds');
+var fs = require('fs');
+var path = require('path');
 
 exports.exec = function(app, url) {
   if(!app) {
@@ -35,8 +38,31 @@ exports.exec = function(app, url) {
 
   if(core.root() && !reinit) {
     console.log('already initialized! use --reinit to change configuration');
+    process.exit(1);
   }
 
   var git_root = core.git_root();
-  console.log(git_root);
+
+  url = url.replace(/\/$/, ''); // remove trailing slash
+
+  var pingurl = core.apiurl('ping', url, 'global');
+  console.log('pinging deploy server...')
+  core.geturl(pingurl, null, null, function(statusCode, text) {
+    if(text != 'net-deploy' || statusCode != 200) {
+    	console.log(url + "doesn't look like a deploy server");
+      process.exit(1);
+    }
+
+    creds.ensure(url, app, function(username, password) {
+      var config = {
+      	app: app,
+      	url: url
+      }
+
+      var configPath = path.join(git_root, 'deploy.json');
+      fs.writeFileSync(configPath, JSON.stringify(config, null, 2), { encoding: 'utf8' });
+
+      console.log("initialized!");
+    });
+  });
 }

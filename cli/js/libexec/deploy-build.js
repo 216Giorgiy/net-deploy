@@ -15,7 +15,7 @@ exports.exec = function() {
   }
 
   console.log('authenticating...');
-  var auth = creds.ensure(function(username, password) {
+  var auth = creds.ensure(null, null, function(username, password) {
     console.log('starting build...')
     core.request(url, username, password, function(err, res) {
       console.log('server state: who knows?')

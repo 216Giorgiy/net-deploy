@@ -97,7 +97,9 @@ exports.host = function(address) {
 }
 function makeRequest(address, username, password, fn) {
   var opts = url.parse(address);
-  opts.auth = username + ":" + password;
+  if(username) {
+      opts.auth = username + ":" + password;
+  }
   var proto;
   if(opts.protocol == 'http:') {
     proto = require('http');

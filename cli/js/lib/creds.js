@@ -26,8 +26,9 @@ function ask(fn) {
   })
 }
 
-exports.ensure = function(fn) {
-  var url = core.baseurl();
+exports.ensure = function(baseurl, app, fn) {
+  var url = baseurl || core.baseurl();
+  app = app || core.app();
 
   var host = core.host(url);
   var auth = get(host);
@@ -46,7 +47,7 @@ exports.ensure = function(fn) {
 
   var username = auth[0];
   var password = auth[1];
-  var checkurl = core.apiurl('detail');
+  var checkurl = core.apiurl('detail', baseurl, app);
 
   checkCreds(checkurl, username, password, function(valid) {
     if(!valid) {
