@@ -30,11 +30,19 @@ namespace deploy.Controllers {
 			var builder = new Builder(id);
 
 			Response.ContentType = "text/plain";
-			builder.LogHook = (message) => Response.Send(message);
+
+			builder.LogHook = (message) => {
+				if(!Response.ClientDisconnectedToken.IsCancellationRequested) {
+					Response.Send(message);
+				}
+			};
+
 			try {
 				builder.Build();
 			} catch(Exception e) {
-				Response.Send(e.ToString());
+				if(!Response.ClientDisconnectedToken.IsCancellationRequested) {
+					Response.Send(e.ToString());
+				}
 			}
 
 			return new EmptyResult();
