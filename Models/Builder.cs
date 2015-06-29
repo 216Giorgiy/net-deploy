@@ -187,7 +187,7 @@ namespace deploy.Models {
 			var xf_arg = xf.Count > 0 ? " /xf " + string.Join(" ", xf) : null;
 			var xd_arg = xd.Count > 0 ? " /xd " + string.Join(" ", xd) : null;
 
-			Cmd.Run("\"robocopy . \"" + deploy_to + "\" /s /purge /nfl /ndl " + xf_arg + xd_arg + "\"", runFrom: source, logPath: _logfile);
+			Cmd.Run("\"robocopy . \"" + deploy_to + "\" /s /nfl /ndl " + xf_arg + xd_arg + "\"", runFrom: source, logPath: _logfile);
 		}
 
 		private void WarmUp() {
