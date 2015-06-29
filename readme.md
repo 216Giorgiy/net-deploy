@@ -81,7 +81,13 @@ If it's still not working, you might need to do some debugging by running as the
 
 ### Command-line interface
 
-To install the CLI (a work in progress), first install [Scoop](http://scoop.sh) and then run:
+To install the new CLI, you need Node and npm installed. Just run:
+
+```
+npm install net-deploy -g
+```
+
+To install the old powershell CLI, first install [Scoop](http://scoop.sh) and then run:
 
 ```powershell
 scoop install https://raw.githubusercontent.com/lukesampson/net-deploy/master/cli/scoop/deploy.json
