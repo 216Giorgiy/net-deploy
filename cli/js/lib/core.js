@@ -72,7 +72,7 @@ var baseurl = exports.baseurl = function() {
   return config().url;
 }
 
-exports.apiurl = function(action, url, appName) {
+var apiurl = exports.apiurl = function(action, url, appName) {
   url = url || baseurl();
   if(!url) return null;
   appName = appName || app();
@@ -122,10 +122,12 @@ exports.request = function(address, username, password, fn) {
     res.on('data', function(chunk) {
       process.stdout.write(chunk.toString());
     });
+
+    res.on('end', fn);
   });
 }
 
-exports.geturl = function(address, username, password, fn) {
+var geturl = exports.geturl = function(address, username, password, fn) {
   makeRequest(address, username, password, function(res) {
     var text = "";
     res.on('data', function(chunk) {
@@ -134,5 +136,16 @@ exports.geturl = function(address, username, password, fn) {
     res.on('end', function() {
       fn(res.statusCode, text);
     })
+  });
+}
+
+exports.getstate = function(username, password, fn) {
+  var url = apiurl('detail');
+  geturl(url, username, password, function(status, text) {
+    if(status != 200) {
+      console.log("server returned " + status + ": " + text);
+    }
+    var json = JSON.parse(text);
+    fn(json);
   });
 }
