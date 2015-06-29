@@ -6,6 +6,7 @@ var fs = require('fs');
 var path = require('path')
 var table = require('text-table');
 
+
 var appname = 'deploy';
 
 function printHelp(cmd) {
