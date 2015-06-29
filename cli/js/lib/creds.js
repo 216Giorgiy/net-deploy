@@ -5,7 +5,7 @@ var read = require('read');
 
 var cachePath = path.join(process.env.HOME, '.deploy', 'auth.txt');
 
-function get(host) {
+var get = exports.get = function(host) {
   var cached = loadCache();
   return cached[host];
 }

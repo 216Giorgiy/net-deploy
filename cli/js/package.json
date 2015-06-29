@@ -22,6 +22,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "pbkdf2": "^3.0.4",
-    "read": "^1.0.6"
+    "read": "^1.0.6",
+    "text-table": "^0.2.0"
   }
 }
