@@ -15,7 +15,7 @@ namespace deploy.Models {
 		string _id;
 		string _appdir;
 		Dictionary<string, string> _config;
-		string _logfile;
+		Log _log;
 		string _sourcedir;
         string _workingdir;
         string _buildconfig;
@@ -26,27 +26,28 @@ namespace deploy.Models {
 
 		public void Build() {
 			lock(AppLock.Get(_id)) {
-				Init();
+				using(_log = new Log(_id)) {
+					Init();
 
-				FileDB.AppState(_id, "building");
-				try {					
-					GitUpdate();
-					NugetRefresh();
-                    CopyWorking();
-                    Transform();
-					Msbuild();
-					Deploy();
-					WarmUp();
+					FileDB.AppState(_id, "building");
+					try {
+						GitUpdate();
+						NugetRefresh();
+						CopyWorking();
+						Transform();
+						Msbuild();
+						Deploy();
+						WarmUp();
 
-					Log("-> build completed");
-					FileDB.AppState(_id, "idle");
-				} catch(Exception e) {
-					Log("ERROR: " + e.ToString());
-					Log("-> build failed!");
-					FileDB.AppState(_id, "failed");
-					throw;
+						Log("-> build completed");
+						FileDB.AppState(_id, "idle");
+					} catch(Exception e) {
+						Log("ERROR: " + e.ToString());
+						Log("-> build failed!");
+						FileDB.AppState(_id, "failed");
+						throw;
+					}
 				}
-
 			}
 		}
 
@@ -56,13 +57,10 @@ namespace deploy.Models {
 
 			_appdir = FileDB.AppDir(_id);
 			_config = FileDB.AppConfig(_id);
-			_logfile = Path.Combine(_appdir, "log.txt");
 			_sourcedir = Path.Combine(_appdir, "source");
             _workingdir = Path.Combine(_appdir, "working");
 
             if(!_config.TryGetValue("build_config", out _buildconfig)) _buildconfig = "Release";
-
-			if(File.Exists(_logfile)) File.Delete(_logfile); // clear log
 		}
 
 		private void GitUpdate() {
@@ -84,18 +82,18 @@ namespace deploy.Models {
 				}
 
 				Cmd.Run("git clone " + giturl + " source" + git_branch_param,
-					runFrom: _appdir, logPath: _logfile).EnsureCode(0);
+					runFrom: _appdir, log: _log).EnsureCode(0);
 			} else {
 				Log("-> pulling git changes");
-				Cmd.Run("git fetch --all", runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+				Cmd.Run("git fetch --all", runFrom: _sourcedir, log: _log).EnsureCode(0);
 				Cmd.Run("git reset --hard origin/" + (git_branch ?? "master"),
-					runFrom: _sourcedir, logPath: _logfile).EnsureCode(0);
+					runFrom: _sourcedir, log: _log).EnsureCode(0);
 			}
 		}
 
 		private void NugetRefresh() {
 			Log("-> refreshing nuget packages");
-			Cmd.Run("echo off && for /r . %f in (packages.config) do if exist %f echo found %f && nuget i \"%f\" -o packages", runFrom: _sourcedir, logPath: _logfile)
+			Cmd.Run("echo off && for /r . %f in (packages.config) do if exist %f echo found %f && nuget i \"%f\" -o packages", runFrom: _sourcedir, log: _log)
 				.EnsureCode(0);
 		}
 
@@ -104,7 +102,7 @@ namespace deploy.Models {
 
             if(!Directory.Exists(_workingdir)) Directory.CreateDirectory(_workingdir);
 
-            Cmd.Run("\"robocopy . \"" + _workingdir + "\" /s /purge /nfl /ndl /xd bin obj .git\"", runFrom: _sourcedir, logPath: _logfile);
+            Cmd.Run("\"robocopy . \"" + _workingdir + "\" /s /purge /nfl /ndl /xd bin obj .git\"", runFrom: _sourcedir, log: _log);
         }
 
         private void Transform() {
@@ -124,7 +122,7 @@ namespace deploy.Models {
                         + " /p:Dir=\"" + dir + "\""
                         + " /p:Source=" + Path.GetFileName(webConfig)
                         + " /p:Transform=" + Path.GetFileName(transform)
-                        + " transform.msbuild\"", scriptpath, _logfile).EnsureCode(0);
+                        + " transform.msbuild\"", scriptpath, _log).EnsureCode(0);
 
                     // delete transforms
                     foreach(var trsfm in Directory.GetFiles(dir, "web.*.config", SearchOption.TopDirectoryOnly)) {
@@ -157,7 +155,7 @@ namespace deploy.Models {
                 parameters += " /p:Configuration=" + _buildconfig;
 			}
 
-            Cmd.Run("\"" + msbuild + "\"" + parameters, runFrom: _workingdir, logPath: _logfile)
+            Cmd.Run("\"" + msbuild + "\"" + parameters, runFrom: _workingdir, log: _log)
 				.EnsureCode(0);
 		}
 
@@ -187,7 +185,7 @@ namespace deploy.Models {
 			var xf_arg = xf.Count > 0 ? " /xf " + string.Join(" ", xf) : null;
 			var xd_arg = xd.Count > 0 ? " /xd " + string.Join(" ", xd) : null;
 
-			Cmd.Run("\"robocopy . \"" + deploy_to + "\" /s /nfl /ndl " + xf_arg + xd_arg + "\"", runFrom: source, logPath: _logfile);
+			Cmd.Run("\"robocopy . \"" + deploy_to + "\" /s /nfl /ndl " + xf_arg + xd_arg + "\"", runFrom: source, log: _log);
 		}
 
 		private void WarmUp() {
@@ -233,7 +231,7 @@ namespace deploy.Models {
 		}
 
 		private void Log(string message) {
-			File.AppendAllText(_logfile, message + "\r\n");
+			_log.Write(message);
 			if(LogHook != null) LogHook(message);
 		}
 	}

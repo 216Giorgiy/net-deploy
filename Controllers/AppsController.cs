@@ -46,10 +46,10 @@ namespace deploy.Controllers {
 
 		[Authorize]
 		public ActionResult Log(string id) {
-			var path = FileDB.LogPath(id);
-			if(!System.IO.File.Exists(path)) return HttpNotFound("No log file found");
+			var text = Models.Log.GetText(id);
+			if(text == null) return HttpNotFound("No log found");
 
-			return File(path, "text/plain");
+			return Content(text, "text/plain");
 		}
 
 	}

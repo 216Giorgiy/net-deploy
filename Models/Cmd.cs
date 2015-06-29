@@ -16,17 +16,17 @@ namespace deploy.Models {
 		string _runFrom;
 		string _logPath;
 		StringBuilder _output;
-		object outputlock = new object();
+		Log _log;
 
-		public Cmd(string command = null, string runFrom = null, string logPath = null) {
+		public Cmd(string command = null, string runFrom = null, Log log = null) {
 			_command = command;
 			_runFrom = runFrom;
-			_logPath = logPath;
+			_log = log;
 			_output = new StringBuilder();
 		}
 
-		public static CmdResult Run(string command, string runFrom = null, string logPath = null) {
-			return new Cmd(command, runFrom, logPath).Run();
+		public static CmdResult Run(string command, string runFrom = null, Log log = null) {
+			return new Cmd(command, runFrom, log).Run();
 		}
 
 		public CmdResult Run() {
@@ -75,11 +75,7 @@ namespace deploy.Models {
 		}
 
 		void WriteLog(string line) {
-			if(_logPath != null) {
-				lock(outputlock) {
-					File.AppendAllText(_logPath, line + "\r\n");
-				}
-			}
+			_log.Write(line);
 		}
 	}
 

@@ -130,6 +130,7 @@
     <Compile Include="Models\Builder.cs" />
     <Compile Include="Models\Cmd.cs" />
     <Compile Include="Models\FileDB.cs" />
+    <Compile Include="Models\Log.cs" />
     <Compile Include="Models\LogService.cs" />
     <Compile Include="Models\TimeDiff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
