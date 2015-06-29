@@ -36,7 +36,7 @@ exports.exec = function() {
       vals.push(['credentials:', username + ':' + maskpass ])
 
       core.getstate(username, password, function(state) {
-        vals.push(['server state', state.state ])
+        vals.push(['server state:', state.state ])
         console.log(table(vals));
       })
     } else {
