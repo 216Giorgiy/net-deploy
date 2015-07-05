@@ -1,9 +1,11 @@
-﻿$(function() {
+﻿var init = Date.now();
+
+$(function() {
 	$('.time').each(function(index, el) {
 		$time = $(el);
 		var date_ms = $time.data('date');
 		if(!date_ms) return;
-		var date = new Date(date_ms);
+		var date = new Date(init + date_ms);
 
 		var update = function() {
 			var ms = Date.now() - date;

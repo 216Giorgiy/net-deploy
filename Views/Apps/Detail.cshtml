@@ -10,7 +10,7 @@
 		<span class="time">never</span>
 		return;
 	}
-	var ms = (long)(when.Value.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalMilliseconds;
+	var ms = (long)(DateTime.Now - when.Value).TotalMilliseconds;
 	<span class="time" data-date="@ms"></span>
 }
 
