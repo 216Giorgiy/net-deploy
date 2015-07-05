@@ -10,7 +10,7 @@
 		<span class="time">never</span>
 		return;
 	}
-	var ms = (long)(DateTime.Now - when.Value).TotalMilliseconds;
+	var ms = (long)(when.Value - DateTime.Now).TotalMilliseconds;
 	<span class="time" data-date="@ms"></span>
 }
 
