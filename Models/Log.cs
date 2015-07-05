@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace deploy.Models {
@@ -19,6 +20,9 @@ namespace deploy.Models {
 		}
 
 		public void Write(string message) {
+			if(message == null) return;
+			// escape credentials
+			message = Regex.Replace(message, @"^(https?://[^:]+):([^@]+)@", "$1:******@");
 			lock(sync) {
 				_sb.AppendLine(message);
 			}

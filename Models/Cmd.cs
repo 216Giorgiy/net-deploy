@@ -14,7 +14,6 @@ namespace deploy.Models {
 	public class Cmd {
 		string _command;
 		string _runFrom;
-		string _logPath;
 		StringBuilder _output;
 		Log _log;
 
