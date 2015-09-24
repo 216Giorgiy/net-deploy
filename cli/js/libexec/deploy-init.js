@@ -49,7 +49,7 @@ exports.exec = function(app, url) {
   console.log('pinging deploy server...')
   core.geturl(pingurl, null, null, function(statusCode, text) {
     if(text != 'net-deploy' || statusCode != 200) {
-    	console.log(url + "doesn't look like a deploy server");
+    	console.log(url + " doesn't look like a deploy server");
       process.exit(1);
     }
 
