@@ -37,7 +37,6 @@ namespace deploy.Models {
 						Transform();
 						Msbuild();
 						Deploy();
-						WarmUp();
 
 						Log("-> build completed");
 						FileDB.AppState(_id, "idle");
@@ -47,6 +46,8 @@ namespace deploy.Models {
 						FileDB.AppState(_id, "failed");
 						throw;
 					}
+
+					WarmUp();
 				}
 			}
 		}
@@ -194,14 +195,7 @@ namespace deploy.Models {
 			if(!string.IsNullOrEmpty(warmup)) {
 				Log("-> warming up");
 				var req = WebRequest.CreateHttp(warmup);
-				try { 
-					var res = req.GetResponse() as HttpWebResponse;
-				} catch(Exception e) {
-					// An error at this stage is not a build error.
-					// If we're self-updating, a ThreadAbortException will likely occur, so
-					// just log and continue.
-					Log("WARNING: error warming up: " + e.Message);
-				}
+				var res = req.GetResponse() as HttpWebResponse;
 			}
 		}
 
