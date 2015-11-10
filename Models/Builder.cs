@@ -38,6 +38,7 @@ namespace deploy.Models {
 							Transform();
 							Msbuild();
 						} else if(IsDnx()) {
+							DnuRestore();
 							DnuPublish();
 						}
 						Deploy();
