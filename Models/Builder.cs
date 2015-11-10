@@ -167,6 +167,16 @@ namespace deploy.Models {
 				.EnsureCode(0);
 		}
 
+		private void DnuRestore() {
+			var runtime = _config["runtime"];
+
+			Log("-> restoring packages");
+
+			Cmd.Run("\"\"" + runtime + "\\bin\\dnu.cmd\" restore\"",
+				runFrom: _workingdir, log: _log)
+				.EnsureCode(0);
+		}
+
 		private void DnuPublish() {
 			var runtime = _config["runtime"];
 
