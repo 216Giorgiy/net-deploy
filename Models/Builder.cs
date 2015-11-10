@@ -172,7 +172,7 @@ namespace deploy.Models {
 
 			Log("-> publishing with " + dnu);
 
-			Cmd.Run("\"\"" + dnu + "\" publish --configuration Release --runtime active\"",
+			Cmd.Run("\"echo %path% && \"" + dnu + "\" publish --configuration Release --runtime active\"",
 				runFrom: _workingdir, log: _log)
 				.EnsureCode(0);
 		}
