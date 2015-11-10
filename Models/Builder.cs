@@ -108,7 +108,7 @@ namespace deploy.Models {
 
             if(!Directory.Exists(_workingdir)) Directory.CreateDirectory(_workingdir);
 
-            Cmd.Run("\"robocopy . \"" + _workingdir + "\" /s /purge /nfl /ndl /xd bin obj .git\"", runFrom: _sourcedir, log: _log);
+            Cmd.Run("\"robocopy . \"" + _workingdir + "\" /s /purge /nfl /ndl /xd bin obj .git node_modules\"", runFrom: _sourcedir, log: _log);
         }
 
         private void Transform() {
