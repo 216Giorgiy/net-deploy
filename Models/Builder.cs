@@ -34,8 +34,12 @@ namespace deploy.Models {
 						GitUpdate();
 						NugetRefresh();
 						CopyWorking();
-						Transform();
-						Msbuild();
+						if(IsMsBuild()) {
+							Transform();
+							Msbuild();
+						} else if(IsDnx()) {
+							DnuPublish();
+						}
 						Deploy();
 
 						Log("-> build completed");
@@ -135,16 +139,19 @@ namespace deploy.Models {
             }
         }
 
+		private bool HasFiles(string s) {
+			return Directory.GetFiles(_workingdir, s).Length > 0;
+		}
+
+		private bool IsMsBuild() {
+			return HasFiles("*.sln") || HasFiles("*.csproj") || HasFiles("*.vbproj");
+		}
+
+		private bool IsDnx() {
+			return HasFiles("project.json");
+		}
+
 		private void Msbuild() {
-			Func<string, bool> hasFiles = (string s) => {
-				return Directory.GetFiles(_workingdir, s).Length > 0;
-			};
-
-			if(!hasFiles("*.sln") && !hasFiles("*.csproj") && !hasFiles("*.vbproj")) {
-				Log("-> nothing to build");
-				return; // nothing to build
-			}
-
             var msbuild = _config["msbuild"];
 
 			var buildver = Regex.Replace(msbuild, @".*\\Microsoft.NET\\", @"..\");
@@ -157,6 +164,13 @@ namespace deploy.Models {
 			}
 
             Cmd.Run("\"" + msbuild + "\"" + parameters, runFrom: _workingdir, log: _log)
+				.EnsureCode(0);
+		}
+
+		private void DnuPublish() {
+			Log("-> publishing");
+
+			Cmd.Run("dnu publish --configuration Release --runtime active", runFrom: _workingdir, log: _log)
 				.EnsureCode(0);
 		}
 
