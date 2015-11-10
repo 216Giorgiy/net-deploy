@@ -168,9 +168,12 @@ namespace deploy.Models {
 		}
 
 		private void DnuPublish() {
-			Log("-> publishing");
+			var dnu = _config["dnu"];
 
-			Cmd.Run("dnu publish --configuration Release --runtime active", runFrom: _workingdir, log: _log)
+			Log("-> publishing with " + dnu);
+
+			Cmd.Run("\"" + dnu + "\" --configuration Release --runtime active",
+				runFrom: _workingdir, log: _log)
 				.EnsureCode(0);
 		}
 
