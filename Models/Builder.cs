@@ -99,7 +99,7 @@ namespace deploy.Models {
 
 		private void NugetRefresh() {
 			Log("-> refreshing nuget packages");
-			Cmd.Run("echo off && for /r . %f in (packages.config) do if exist %f echo found %f && nuget i \"%f\" -o packages", runFrom: _sourcedir, log: _log)
+			Cmd.Run("echo off && for /r . %f in (packages.config) do if exist %f echo found %f && nuget install \"%f\" -o packages", runFrom: _sourcedir, log: _log)
 				.EnsureCode(0);
 		}
 
