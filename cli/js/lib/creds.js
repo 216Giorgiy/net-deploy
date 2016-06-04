@@ -3,7 +3,7 @@ var core = require('./core.js');
 var path = require('path');
 var read = require('read');
 
-var cachePath = path.join(process.env.HOME, '.deploy', 'auth.txt');
+var cachePath = path.join(process.env.HOME || process.env.USERPROFILE, '.deploy', 'auth.txt');
 
 var get = exports.get = function(host) {
   var cached = loadCache();
